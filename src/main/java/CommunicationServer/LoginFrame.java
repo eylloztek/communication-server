@@ -148,15 +148,12 @@ public class LoginFrame extends javax.swing.JFrame {
         for (User user : userList) {
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 found = true;
-                openMainMenu(user);
+                SessionManager.login(user);  // Kullanıcıyı SessionManager'a kaydet
+                openMainMenu(user);  // Kullanıcı bağımsız bir şekilde main menu'ye geçiş yap
                 break;
             }
         }
-
-        if (found) {
-            JOptionPane.showMessageDialog(this, "Login successful");
-            
-        } else {
+        if (!found) {
             JOptionPane.showMessageDialog(this, "Invalid username or password");
         }
     }//GEN-LAST:event_btn_signInActionPerformed
@@ -196,7 +193,7 @@ public class LoginFrame extends javax.swing.JFrame {
         mainMenuFrame.setVisible(true);
         this.dispose();
     }
-    
+
     private void openRegisterFrame() {
         RegisterFrame registerFrame = new RegisterFrame();
         registerFrame.setVisible(true);

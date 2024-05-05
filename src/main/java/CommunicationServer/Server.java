@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package CommunicationServer;
 
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
- *
- * @author Eylül Öztek
- */
 public class Server {
     private ServerSocket serverSocket;
     public Socket socket;

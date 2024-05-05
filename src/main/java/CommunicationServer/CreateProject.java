@@ -7,11 +7,10 @@ import java.awt.font.TextAttribute;
 import java.util.Map;
 import javax.swing.JOptionPane;
 
-
 public class CreateProject extends javax.swing.JFrame {
 
     private User currentUser;
-    
+
     public CreateProject(User currentUser) {
         this.currentUser = currentUser;
         initComponents();
@@ -110,7 +109,7 @@ public class CreateProject extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please enter a project name.");
             return;
         }
-        
+
         int projectKey = UniqueKeyGenerator.generateKey();
         String projectInfo = projectName + " - Key: " + projectKey;
         currentUser.addProject(projectInfo);
@@ -136,7 +135,12 @@ public class CreateProject extends javax.swing.JFrame {
     }//GEN-LAST:event_lbl_goBackMouseExited
 
     private void lbl_goBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_goBackMouseClicked
-        openMainMenu();
+        User currentUser = SessionManager.getCurrentUser();
+        if (currentUser != null) {
+            openMainMenu(currentUser);
+        } else {
+            JOptionPane.showMessageDialog(this, "No active user session found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_lbl_goBackMouseClicked
 
     private void openMainMenu(User user) {
@@ -144,7 +148,7 @@ public class CreateProject extends javax.swing.JFrame {
         mainMenu.setVisible(true);
         this.dispose();
     }
-    
+
     /**
      * @param args the command line arguments
      */

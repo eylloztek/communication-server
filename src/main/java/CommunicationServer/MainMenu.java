@@ -7,25 +7,16 @@ import javax.swing.JOptionPane;
 
 public class MainMenu extends javax.swing.JFrame {
 
-    private DefaultListModel<String> projectListModel;
     private User currentUser;
 
     public MainMenu(User user) {
-        updateProjectList();
-        this.currentUser = currentUser;
-        lbl_name.setText("Hello " + currentUser);
-        projectListModel = new DefaultListModel<>();
-        lst_projects.setModel(projectListModel);
         initComponents();
-
-    }
-
-    private void updateProjectList() {
-        projectListModel.clear();
-        ArrayList<String> projects = currentUser.getProjects();
-        for (String project : projects) {
+        this.currentUser = user;
+        DefaultListModel<String> projectListModel = new DefaultListModel<>();
+        for (String project : currentUser.getProjects()) {
             projectListModel.addElement(project);
         }
+        lst_projects.setModel(projectListModel);
     }
 
     @SuppressWarnings("unchecked")
@@ -45,7 +36,7 @@ public class MainMenu extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(500, 500));
 
         lbl_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lbl_name.setText("Welcome User!");
+        lbl_name.setText("Welcome to the System!");
 
         btn_createProject.setText("Create a Project");
         btn_createProject.addActionListener(new java.awt.event.ActionListener() {
@@ -70,19 +61,23 @@ public class MainMenu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(186, 186, 186)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lbl_name)
-                    .addComponent(btn_createProject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_goToProject, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(129, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(122, 122, 122))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(186, 186, 186)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btn_createProject, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_goToProject, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(165, 165, 165)
+                        .addComponent(lbl_name)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,23 +104,45 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_createProjectActionPerformed
 
     private void btn_goToProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goToProjectActionPerformed
+//        String selectedProject = lst_projects.getSelectedValue();
+//        if (selectedProject != null && !selectedProject.isEmpty()) {
+//            openGoToProject();
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Please select a project.");
+//        }
+
         String selectedProject = lst_projects.getSelectedValue();
-        if (selectedProject != null && !selectedProject.isEmpty()) {
-            openGoToProject();
+        if (selectedProject != null) {
+            String[] projectInfo = selectedProject.split(" - Key: ");
+            String projectName = projectInfo[0];
+            String projectKey = projectInfo[1];
+            String inputKey = JOptionPane.showInputDialog(this, "Enter project key for " + projectName);
+            
+            // Kullanıcının girdiği anahtarın doğru olup olmadığını kontrol etme
+            if (inputKey != null && inputKey.equals(projectKey)) {
+                openGoToProject();
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid project key", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a project.");
+            JOptionPane.showMessageDialog(this, "Please select a project", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btn_goToProjectActionPerformed
 
     private void openCreateProject() {
-        CreateProject createProject = new CreateProject();
-        createProject.setVisible(true);
-        this.dispose();
+        User currentUser = SessionManager.getCurrentUser();
+        if (currentUser != null) {
+            CreateProject createProject = new CreateProject(currentUser);
+            createProject.setVisible(true);
+            this.setVisible(false);
+        } else {
+            JOptionPane.showMessageDialog(this, "No active user session found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void openGoToProject() {
-        CreateProject createProject = new CreateProject();
-        createProject.setVisible(true);
+        ProjectFrame projectFrame = new ProjectFrame();
+        projectFrame.setVisible(true);
         this.dispose();
     }
 
