@@ -13,7 +13,6 @@ public class MainMenu extends javax.swing.JFrame {
 
     public MainMenu() {
         initComponents();
-
     }
 
     public void setUserId(int userId) {
@@ -125,6 +124,7 @@ public class MainMenu extends javax.swing.JFrame {
                 // Proje anahtarı doğru ise ilgili projeye geç
                 if (DatabaseManager.isProjectOwner(userId, key)) {
                     loadUserProjects(); // Kullanıcının sahip olduğu projeleri yeniden yükle
+                    openGoToProject(key);
                 } else {
                     // Proje sahibi değilse, kullanıcıyı projeye ata ve projeleri yeniden yükle
                     DatabaseManager.assignUserToProject(userId, key);
@@ -144,16 +144,14 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void loadUserProjects() {
         projectListModel.clear();
-        // Kullanıcının sahip olduğu projeleri al
+
         List<String> projects = DatabaseManager.getUserProjects(userId);
         System.out.println(this.userId);
 
-        // Projeleri list modeline ekle
         for (String project : projects) {
             projectListModel.addElement(project);
         }
 
-        // lst_projects'in modelini güncelle
         lst_projects.setModel(projectListModel);
     }
 
@@ -167,9 +165,10 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     private void openGoToProject(String projectKey) {
-        ProjectFrame projectFrame = new ProjectFrame();
+        GroupChatFrame projectFrame = new GroupChatFrame();
+        projectFrame.setUserId(userId);
         projectFrame.setVisible(true);
-        //this.dispose();
+        this.dispose();
     }
 
     /**

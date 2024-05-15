@@ -110,8 +110,8 @@ public class CreateProject extends javax.swing.JFrame {
         String projectName = txt_pjname.getText();
         String projectDescription = txt_description.getText();
 
-        if (projectName.isEmpty() || projectDescription.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (projectName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please give your project a name.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -149,6 +149,7 @@ public class CreateProject extends javax.swing.JFrame {
 
     private void openMainMenu() {
         MainMenu mainMenu = new MainMenu();
+        mainMenu.setUserId(userId);
         mainMenu.setVisible(true);
         this.dispose();
     }
