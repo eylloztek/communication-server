@@ -150,7 +150,7 @@ public class GroupChatFrame extends javax.swing.JFrame {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setVisible(true);
     }//GEN-LAST:event_btn_moreActionPerformed
-
+   
     /**
      * @param args the command line arguments
      */
